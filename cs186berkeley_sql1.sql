@@ -271,17 +271,39 @@ following query are equivalent
 -- 	avg(S.rating)
 -- ;
 /*
-how do we read this query to understand/predict the output
-let's start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
+how do we read this query to understand/predict the output, there are 2 ways to do so:
+first way:
+-> we start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
 an alias for Sailors table;
-next we read the where clause: where S.age < 30 -> output only the rows where age is column is less than 30;
-next we read the group by clause: group by S.age -> create groups based on S.age, i.e, for each unique age in the
+-> next we read the where clause: where S.age < 30 -> output only the rows where age is column is less than 30;
+-> next we read the group by clause: group by S.age -> create groups based on S.age, i.e, for each unique age in the
 age column, output only a single row;
-next we filter the groups created by the group by operation using the having clause: having count(*) >= 2 -> keep
+-> next we filter the groups created by the group by operation using the having clause: having count(*) >= 2 -> keep
 only those groups that have atleast 2 rows;
-post this, we don't directly go to the order by, we first select what we want in the output from the set of rows
+-> post this, we don't directly go to the order by, we first select what we want in the output from the set of rows
 obtained as the output of above constructs, i.e, for each of the groups, we get the age, the average rating and
-the number of elements in that group, we then order by the average rating of each group
+the number of elements in that group
+-> we then order by the average rating of each group
+
+second way:
+-> we start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
+an alias for Sailors table;
+-> next we read the where clause: where S.age < 30 -> output only the rows where age is column is less than 30;
+-> next we read the select clause: we request the age column value and for whatever grouping we are about to
+perform (remember if we don't do any grouping using the group by clause, we are talking about the whole table as
+a group), we need the aggregated average rating and the aggregated count of rows post grouping -> note that since
+we are asking for the age column along with the aggregated values, we would need to include the age column in the
+group by clause, this is because we are aggregating the values for other columns and those will return a single
+value, sql needs a single value to output corresponding to those values and if we don't have the group by clause,
+that single value is ambiguous since the group by is essentially on the whole table, we can't select any row's age
+value and output it along with the aggregation done on the rating column and the count; with this info, we move to
+the group by clause
+-> we read the group by clause: group by S.age -> because of the select cause, we need S.age in the group by, what this
+does it that for each unique age in the age column, output only a single row and perform aggregations requested in select
+clause for each group, rather than the whole table;
+-> next we filter the groups created by the group by operation using the having clause: having count(*) >= 2 -> keep
+only those groups that have atleast 2 rows;
+-> we then order by the average rating of each group
 */
 
 /*
