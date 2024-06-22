@@ -4,7 +4,7 @@
 
 -- create table Sailors (  sid integer,     sname char(20),     rating integer,     age float);
 
--- -- can add primary key later as well
+-- -- can add `primary key` later as well
 -- alter table Sailors add primary key (sid);
 
 -- create table Boats (  bid integer,     bname char(20),     primary key (bid) );
@@ -37,7 +37,7 @@
 
 -- select * from Boats;
 
--- -- always specify date in year-month-date format
+-- -- always specify `date` type column values in 'year-month-date' format
 -- insert into Reserves values
 -- (1, 102, date('2015-9-12')),
 -- (2, 102, date('2015-9-13'))
@@ -46,9 +46,9 @@
 -- select * from Reserves;
 
 /*
-select distinct returns all the distinct (col0, col1, ... coln-1) tuples, i.e, the distinct is not just on the
-column name against which you specify it, but over all the columns that follow
-the following query returns all distinct sid, bid pairs from the 'Reserves' table
+`select distinct` returns all the distinct (col0, col1, ... coln-1) tuples, i.e, the `distinct` is not just on the column name set
+immediately after the `distinct` keyword, but over all the columns that follow;
+the following query returns all distinct (sid, bid) pairs from the 'Reserves' table
 */
 -- select distinct
 -- 	sid,
@@ -57,9 +57,9 @@ the following query returns all distinct sid, bid pairs from the 'Reserves' tabl
 -- 	Reserves;
 
 /*
-in an order by clause, we first do the ordering on the first column that's specified, if there is a tie on the first column that we
-specify, we break the tie by ordering on the next column and so on
-order by has to be on columns mentioned in the select clause, coz that's what we are sorting
+in an `order by` clause, we first do the ordering on the first column that's specified, if there is a tie on the first column that we
+specify, we break the tie by ordering on the next column and so on; `order by` has to be on columns mentioned in the `select` clause,
+coz that's what we are sorting
 */
 -- select
 -- 	*
@@ -71,7 +71,7 @@ order by has to be on columns mentioned in the select clause, coz that's what we
 -- ;
 
 /*
-each aggregate clause will produce a single row of output for each group
+each `aggregate` clause will produce a single row of output for each group;
 here we haven't specified any group, so the group is the whole table
 */
 -- select
@@ -87,9 +87,9 @@ here we haven't specified any group, so the group is the whole table
 -- ;
 
 /*
-the following query is an error, coz the 'avg' aggregate clause returns a single value for a group, since we haven't specified it,
-the group is the whole table, the error here is that how does sql know to return a single value of age for the whole group, i.e,
-what value to chose in the age column for the whole table, therefore, this query is an error
+the following query is an error, coz the 'avg' `aggregate` clause returns a single value for a group, since we haven't specified it,
+the group is the whole table, the error here is that how does `sql` know to return a single value of 'age' for the whole group, i.e,
+what value to chose in the 'age' column for the whole table, therefore, this query is an error
 */
 -- select
 -- 	age, avg(rating)
@@ -97,8 +97,8 @@ what value to chose in the age column for the whole table, therefore, this query
 -- 	Sailors;
 
 /*
-following the previous query, we need to make sure to get a single value for the age column, we can use an aggregate function
-for doing this, or we can group by on the age column, which would create groups from the whole table based on age column, i.e,
+following the previous query, we need to make sure to get a single value for the 'age' column, we can use an `aggregate` function
+for doing this, or we can `group by` on the 'age' column, which would create groups from the whole table based on 'age' column, i.e,
 it will return a single value for each group and then aggregate over each group's rating,
 cardinality of output = number of distinct group values
 */
@@ -118,10 +118,10 @@ cardinality of output = number of distinct group values
 -- ;
 
 /*
-in the following query, we do group by S.age, which implies, create groups based on S.age, i.e, for each unique age in the
-age column, output only a single row, the corresponding values of all columns for that row have to be aggregated or ommitted or
-further grouped by, because for a group, we need to tell sql how to output a single value for all the grouped rows, for every
-column that we want in the output (that exists in the select statement), therefore the columns that we mention in the select
+in the following query, we do `group by` S.age, which implies, create groups based on S.age, i.e, for each unique 'age' in the
+'age' column, output only a single row, the corresponding values of all columns for that row have to be aggregated or ommitted or
+further grouped by, because for a group, we need to tell `sql` how to output a single value for all the grouped rows, for every
+column that we want in the output (that exists in the `select` statement), therefore, the columns that we mention in the `select`
 statement are dependent on the columns we are grouping by
 */
 -- select
@@ -147,8 +147,8 @@ at this point, the Sailors table looks like this:
 +-----+-------+--------+-----+
 |   5 | hello |      8 |  27 |
 +-----+-------+--------+-----+
-in the following query, we do group by S.age, S.rating -> create groups based on a unique pair of S.age, S.rating,
-i.e, for each unique age, rating pair in the table, output only a single row
+in the following query, we do `group by` S.age, S.rating -> create groups based on a unique pair of S.age, S.rating,
+i.e, for each unique 'age', 'rating' pair in the table, output only a single row
 */
 -- select
 -- 	S.age,
@@ -160,9 +160,9 @@ i.e, for each unique age, rating pair in the table, output only a single row
 --     S.rating
 -- ;
 /*
-even though there is a single age for 'Nancy', 'jai', 'hello', i.e, 27, the uniqueness is defined by the pair of
-S.age, S.rating, for which there are only 2 unique pairs (8, 27) and (9, 27) and that is what we get in the
-output:
+even though there is a single/same 'age' for 'Nancy', 'jai', 'hello', i.e, 27, the uniqueness is defined by the pair of
+(S.age, S.rating), for which there are only 2 unique pairs (8, 27) and (9, 27) and that is what we get in the
+output, the other unique pairs being (7, 22) and (2, 39):
 +=====+========+
 | age | rating |
 +=====+========+
@@ -178,15 +178,14 @@ output:
 
 /*
 let's say we only want certain groups in the output, groups that satisfy a particular condition
-one way to do this, is to filter output groups using the having clause;
-think of having as a condition that will be applied on the output rows produced as the output of
-the group by clause, followed by the aggregation defined by the having clause on the output of
-the group by clause
-
+one way to do this, is to filter output groups using the `having` clause;
+think of `having` as a condition that will be applied on the output rows produced as the output of
+the `group by` clause, followed by the aggregation defined by the `having` clause on the output of
+the `group by` clause
 in the following statement, we have:
-no group by (default group by over whole table), no aggregation in having (default aggregation for each single value): when we don't
-have a group by, can we understand it as all rows being different groups and the aggregation is each of the rows value in that column
-when we then use having, it will behave like a where clause?
+no `group by` (default `group by` over whole table), no aggregation in `having` clause (default aggregation for each single value);
+when we don't have a `group by`, can we understand it as all rows being different groups and the aggregation is each row's value in that
+column, when we then use `having`, it will behave like a `where` clause?
 */
 -- select
 --     age
@@ -198,10 +197,10 @@ when we then use having, it will behave like a where clause?
 
 /*
 in the following statement, we have:
-no group by (default group by over whole table), aggregation in having
-here we are aggregating over age and selecting age as well, aggregation will return a single value, which is the avg(age)
-in this case, but what should be the age value corresponding to that avg value, i.e,
-the age value is ambiguous for the group (the whole table), hence this query is an error
+no `group by` (default `group by` over whole table), aggregation in `having` clause;
+here we are aggregating over 'age' and selecting 'age' as well, aggregation will return a single value, which is the avg(age), but
+what should be the 'age' value corresponding to that 'avg' value, i.e, the 'age' value is ambiguous for the group (the whole table),
+hence this query is an error:
 */
 -- select
 --     age
@@ -216,7 +215,7 @@ the age value is ambiguous for the group (the whole table), hence this query is 
 -- from
 -- 	Sailors
 -- having
--- 	avg(age) < 30
+-- 	avg(age) > 30
 -- ;
 -- -- or we can group by the age column, here the aggregation in the having clause happens post the group by
 -- select
@@ -254,7 +253,7 @@ following query are equivalent
 -- 	avg(rating) > 5
 -- ;
 
--- -- putting it all together, let's say we have a query using everything we have learnt above 
+-- -- putting it all together, let's say we have a query using everything we have learnt above
 -- select
 -- 	S.age,
 --     avg(S.rating),
@@ -270,6 +269,7 @@ following query are equivalent
 -- order by
 -- 	avg(S.rating)
 -- ;
+
 /*
 how do we read this query to understand/predict the output, there are 2 ways to do so:
 first way:
@@ -284,7 +284,6 @@ only those groups that have atleast 2 rows;
 obtained as the output of above constructs, i.e, for each of the groups, we get the age, the average rating and
 the number of elements in that group
 -> we then order by the average rating of each group
-
 second way:
 -> we start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
 an alias for Sailors table;
@@ -309,11 +308,9 @@ only those groups that have atleast 2 rows;
 /*
 the relational model has well-defined query semantics: what this means is that any query that we define has a single
 meaning and regardless of the dbms we use, if it follows sql semantics, the ouptut is well defined
-
 sql extends the "pure" relational model with some sql specific features, for eg. duplicate rows (rows that are exactly
 the same (all columns values are the same, except the primary key?) but we count them as separate), aggregates, ordering
 of output etc.
-
 typically, there is more than one way to write the same query, i.e, that will output the same rows and it is the job of
 the dbms to figure out the optimal way to execute that query
 */
