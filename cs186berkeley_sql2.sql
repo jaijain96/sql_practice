@@ -292,4 +292,9 @@ or
 so for any combination, there are only 2 such pairs where a Sailor has made 
 reservations for 'red' boat and a 'green' boat, not a boat which is both 
 'red' and 'green' in color.
+
+is the above logic correct for understanding the nature of intersect all?
+need more examples/questions
 */
+
+
