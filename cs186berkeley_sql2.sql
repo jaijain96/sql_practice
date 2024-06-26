@@ -276,6 +276,7 @@ where (
         b.bid = r.bid
         and b.color = 'green'
     );
+
 /*
 this gives us the 2 instances of sid '4' (Sailor 'jai') who made 4 
 reservations:
@@ -292,9 +293,279 @@ or
 so for any combination, there are only 2 such pairs where a Sailor has made 
 reservations for 'red' boat and a 'green' boat, not a boat which is both 
 'red' and 'green' in color.
-
 is the above logic correct for understanding the nature of intersect all?
 need more examples/questions
 */
 
+/*
+nested queries or subqueries with the `in` clause;
+here we are getting all Sailor names who made a reservation for boat 101
+*/
+select s.sname
+from `Sailors` s
+where
+    s.sid in (
+        select r.sid
+        from `Reserves` r
+        where
+            r.bid = 101
+    );
 
+/*
+we can use `not in` for getting the opposite result,
+we can search for all Sailor names who didn't make a reservation for boat 101
+*/
+select s.sname
+from `Sailors` s
+where
+    s.sid not in(
+        select r.sid
+        from `Reserves` r
+        where
+            r.bid = 101
+    );
+
+/*
+we can use the `exists` clause for filtering based on row existence,
+the query below will give all Sailor names if any reservation for bid 101 had
+been made, else will return nothing
+*/
+select s.sname
+from `Sailors` s
+where
+    exists (
+        select r.sid
+        from `Reserves` r
+        where
+            r.bid = 101
+    );
+
+/*
+the query below is an example of a correlated subquery, which means that there 
+is a reference to a object 's' of the outer query, within the subquery;
+a correlated subquery can be though of as a function equivalent in a 
+programming language, the subquery will be executed for each tuple processed 
+from the outer query, in the case below, each tuple from Sailors table will be 
+passed to the subquery and then the subquery will be run for that tuple, if a 
+result is returned for that subquery, the outer query's where clause treats 
+that as true because of the exists clause and that tuple (that was passed 
+from the outer query to the subquery) is kept in the output
+*/
+select s.sname
+from `Sailors` s
+where
+    exists (
+        select *
+        from `Reserves` r
+        where
+            r.bid = 102
+            and r.sid = s.sid
+    );
+
+/*
+apart from the `in`, `not in`, 'exists`, `not exists`, there are other query 
+comparators, `any` and `all`;
+we can use `any` in this manner: 
+*/
+select s.sname
+from `Sailors` s
+where
+    s.rating < any (
+        select s2.rating
+        from `Sailors` s2
+        where
+            s2.sname = 'jai'
+    );
+
+/*
+need more practice of any and all
+*/
+
+/*
+how do we find the argmax for a particular column for a table,
+let's say we want to find the Sailor with the maximum rating, one way to do so 
+is with the following query:
+*/
+select sname
+from `Sailors`
+where
+    rating = (
+        select max(rating)
+        from `Sailors`
+    );
+
+/*
+another way to do so is this way:
+*/
+select sname
+from `Sailors`
+where
+    rating >= all (
+        select rating
+        from `Sailors`
+    );
+
+/*
+or maybe we do this way:
+*/
+select sname from `Sailors` order by rating desc limit 1;
+
+/*
+the difference between the last query and the 2 before that for calculating 
+the argmax is that the last one is a little non-deterministic; in case there 
+is more that one tuple that is the argmax, the last query can give different 
+results, whereas, the first 2 queries will always return the set of all rows 
+that are all argmax for the set
+*/
+
+/*
+a general join statement can have the following structure:
+```
+select <column expression list>
+from table_name
+[inner|natural|cross|{left | right | full}{outer}] join
+table_name
+on <qualification list>
+where
+...
+```
+we read the `from` clause expression: 
+`[inner|natural|cross|{left | right | full}{outer}] join`
+in this manner:
+the `|` character is what it is in most programming langauages, stands for 
+'or', whereas, the `{}` denote optional values, this means, the valid values 
+from the above expression are:
+join
+inner join
+natural join
+cross join
+since the outer keyword is optional, these are equivalent:
+left join <-> left outer join
+right join <-> right outer join
+full join <-> full outer join
+*/
+
+/*
+the syntax that we have been using for joins:
+*/
+select * from `Sailors` s, `Reserves` r;
+/*
+is equivalent to an explicit cross join:
+*/
+select * from `Sailors` s cross join `Reserves` r;
+
+/*
+also, `inner join` and `join` are equivalent:
+*/
+select * from `Sailors` s inner join `Reserves` r;
+/*
+although mysql allows this, an inner join without a `on` clause isn't allowed 
+in standard sql
+*/
+
+select * from `Sailors` s join `Reserves` r;
+/*
+although mysql allows this, a join without a `on` clause isn't allowed in 
+standard sql
+*/
+
+/*
+in mysql, inner join and cross join are equivalent, but not in standard sql;
+in standard sql, an inner join (or simply join) must have a `on` clause, 
+whereas, a cross join (or an implicit join, i.e, without the `join` keyword) 
+can't have a `on` clause;
+mysql allows all 4 cases:
+implicit join
+cross join
+inner join
+join
+to be equivalent, i.e, they can all have the `on` clause except the implicit 
+join, the following are equivalent:
+*/
+select * from `Sailors` s, `Reserves` r where s.sid = r.sid;
+/*
+coz we can't have a `on` clause in an implicit join
+*/
+
+select * from `Sailors` s cross join `Reserves` r on s.sid = r.sid;
+/*
+although mysql allows this, a cross join with a `on` clause isn't allowed in 
+standard sql
+*/
+
+select * from `Sailors` s inner join `Reserves` r on s.sid = r.sid;
+
+select * from `Sailors` s join `Reserves` r on s.sid = r.sid;
+
+/*
+there is another flavour of inner join, called the natural join, a natural 
+join is the same as inner join, but doesn't take in a `on` clause, this is 
+because by default, the natural join takes any columns that are common to the 
+tables we are joining and performs inner join using those columns
+*/
+select * from `Sailors` s natural join `Reserves` r;
+
+/*
+in the inner join, only rows that have the same values for `on` clause 
+'qualification list' are kept in the output, the left join simply preserves 
+unmatched rows from the left table in the output, but not from the right 
+table; for unmatched rows, the output column values from the right table are 
+simply nulls
+*/
+select *
+from `Sailors` s
+    left join `Reserves` r on s.sid = r.sid;
+
+/*
+similarly, the right join preserves unmatched rows from the right table in the 
+output, but not from the left table; for unmatched rows, the output column 
+values from the left table are simply nulls
+*/
+select *
+from `Sailors` s
+    right join `Reserves` r on s.sid = r.sid;
+
+/*
+the full join preserves unmatched rows from both the left table and right 
+table in the output; for unmatched rows, the output column values from both 
+tables are simply nulls
+*/
+select *
+from `Sailors` s
+    right join `Reserves` r on s.sid = r.sid;
+
+-- create table test (y int);
+
+-- drop PROCEDURE test_proc;
+
+-- create PROCEDURE test_proc()
+begin DECLARE x INT DEFAULT 0;
+
+label1: loop insert into test values (x);
+
+set x = x + 1;
+
+if x > 10 then leave label1;
+
+end if;
+
+end loop;
+
+end
+-- call test_proc ();
+
+begin select * FROM ( DECLARE x INT DEFAULT 0;
+
+    label1: loop
+        -- insert into test values (x);
+        SELECT x;
+
+set x = x + 1;
+
+if x > 10 then leave label1;
+
+end if;
+
+end loop;
+
+) end;
