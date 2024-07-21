@@ -1,6 +1,30 @@
--- Active: 1719034369062@@127.0.0.1@3306@sql_practice
-SELECT AVG(age) FROM Sailors;
+/*
+create table test (y int);
 
--- insert into Sailors
--- values
--- (6, 'world', 4, 45);
+drop PROCEDURE test_proc;
+
+create PROCEDURE test_proc()
+begin
+    DECLARE x INT DEFAULT 0;
+        label1: loop insert into test values (x);
+        set x = x + 1;
+        if x > 10 then leave label1;
+        end if;
+    end loop;
+end
+
+call test_proc ();
+
+begin
+select * FROM (
+    DECLARE x INT DEFAULT 0;
+        label1: loop
+            -- insert into test values (x);
+            -- SELECT x;
+            set x = x + 1;
+            if x > 10 then leave label1;
+            end if;
+        end loop;
+    )
+end;
+*/

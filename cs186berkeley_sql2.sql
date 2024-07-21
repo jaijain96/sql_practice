@@ -534,38 +534,144 @@ select *
 from `Sailors` s
     right join `Reserves` r on s.sid = r.sid;
 
--- create table test (y int);
+/*
+views are named queries, can be treated as macros or functions in a 
+programming language; they make development easier and are often used for 
+providing security by enhancing access control,
+an example of this is a simple case where we want to give a subset of our 
+users access to a table's data, but we don't want to give access to all 
+columns of that table, in this scenario, we can create a view on that table 
+which contains only that column and we give our users access to that view 
+instead of that table;
+views are not materialized, which means that they don't store any data, they 
+are simply stored queries which upon execution will return the data queried, 
+if the underlying tables that a view is querying changes, the results of 
+querying the view will also change
+*/
 
--- drop PROCEDURE test_proc;
+create view redcount as (
+    select b.bid, count(*) as scount
+    from `Boats` b, `Reserves` r
+    where
+        r.bid = b.bid
+        and b.color = 'red'
+    group by
+        b.bid
+);
 
--- create PROCEDURE test_proc()
-begin DECLARE x INT DEFAULT 0;
+/*
+post creation, views can be used similar to regular tables in a query
+*/
+select * from redcount;
 
-label1: loop insert into test values (x);
+/*
+views can be created on the fly by adding the "view" query in the from clause 
+followed by the as clause
+*/
+select bname, scount
+from `Boats` b, (
+        select b.bid, count(*)
+        from `Boats` b, `Reserves` r
+        where
+            r.bid = b.bid
+            and b.color = 'red'
+        group by
+            b.bid
+    ) as reds (bid, scount)
+where
+    reds.bid = b.bid
+    and scount < 10;
+/*
+something to note is that when we mention the paranthesized subquery in the 
+from clause, there is a comma (`,`) that separates the tables, hence we are 
+doing an implicit join (cross join) with the view/table returned by the 
+subquery;
+the same query be written in a more structured form in this manner:
+*/
+with
+    reds (bid, scount) as (
+        select b.bid, count(*)
+        from `Boats` b, `Reserves` r
+        where
+            r.bid = b.bid
+            and b.color = 'red'
+        group by
+            b.bid
+    )
+select bname, scount
+from `Boats` b, reds
+where
+    reds.bid = b.bid
+    and scount < 10;
+/*
+this way of defining a view subquery using the `with` statement is called a 
+common table expression (cte); again, note that we are joining the table/view 
+returned by 'reds' cte with the 'Boats' table in the from clause;
+we can have many queries in the with or the cte:
+*/
+with
+    reds (bid, scount) as (
+        select b.bid, count(*)
+        from `Boats` b, `Reserves` r
+        where
+            r.bid = b.bid
+            and b.color = 'red'
+        group by
+            b.bid
+    ),
+    unpopularreds as (
+        select bname, scount
+        from `Boats` b, reds
+        where
+            reds.bid = b.bid
+            and scount < 10
+    )
+select *
+from unpopularreds;
 
-set x = x + 1;
+select sname, age, rating from `Sailors`;
 
-if x > 10 then leave label1;
+insert into `Sailors` values (7, 'drew', 7, 45);
 
-end if;
+update `Sailors` set sname = 'pam' where sname = 'hello';
 
-end loop;
+update `Sailors` set rating = 7 where sname = 'pam';
 
-end
--- call test_proc ();
+/*
+argmax rating for each age group:
+*/
+-- with
+--     age_group_max_rating (group_age, max_rating) as (
+--         select age as group_age, max(rating) as max_rating
+--         from `Sailors`
+--         group by
+--             age
+--     )
+-- select s.sname, s.age, s.rating
+-- from
+--     `Sailors` as s,
+--     age_group_max_rating as m
+-- where
+--     s.rating = m.max_rating and s.age = m.group_age;
 
-begin select * FROM ( DECLARE x INT DEFAULT 0;
+with
+    age_group_max_rating (max_rating) as (
+        select max(rating) as max_rating
+        from `Sailors`
+        group by
+            age
+    )
+select distinct
+    s.sname,
+    s.age,
+    s.rating
+    -- , m.max_rating
+from
+    `Sailors` as s,
+    age_group_max_rating as m
+where
+    s.rating = m.max_rating;
 
-    label1: loop
-        -- insert into test values (x);
-        SELECT x;
+select sname, age, rating from `Sailors`;
 
-set x = x + 1;
-
-if x > 10 then leave label1;
-
-end if;
-
-end loop;
-
-) end;
+select max(rating) as max_rating from `Sailors` group by age;
