@@ -4,17 +4,19 @@
 
 -- create table Sailors (  sid integer,     sname char(20),     rating integer,     age float);
 
--- -- can add `primary key` later as well
--- alter table Sailors add primary key (sid);
-
+-- -- create a table with a `primary key`
 -- create table Boats (  bid integer,     bname char(20),     primary key (bid) );
+
+-- -- can add `primary key` to a table post creation
+-- alter table Sailors add primary key (sid);
 
 -- create table Reserves (
 -- 	sid integer,
 --     bid integer,
 --     day date,
 --     primary key (sid, bid, day),
--- -- need to specify the reference to key in other table, i.e, the following line can't be: 'foreign key (sid) references Sailors',
+-- -- in mysql, we need to specify the reference to key in other table, i.e, the following line can't be:
+-- -- 'foreign key (sid) references Sailors',
 --     foreign key (sid) references Sailors (sid),
 --     foreign key (bid) references Boats (bid)
 -- );
@@ -37,7 +39,7 @@
 
 -- select * from Boats;
 
--- -- always specify `date` type column values in 'year-month-date' format
+-- -- in mysql, always specify `date` type column values in 'year-month-date' format
 -- insert into Reserves values
 -- (1, 102, date('2015-9-12')),
 -- (2, 102, date('2015-9-13'))
@@ -46,8 +48,8 @@
 -- select * from Reserves;
 
 /*
-`select distinct` returns all the distinct (col0, col1, ... coln-1) tuples, i.e, the `distinct` is not just on the column name set
-immediately after the `distinct` keyword, but over all the columns that follow;
+`select distinct` returns all the distinct (col0, col1, ... coln-1) tuples, i.e, the `distinct` is not just on the 
+column name immediately after the `distinct` keyword, but over all the columns that follow;
 the following query returns all distinct (sid, bid) pairs from the 'Reserves' table
 */
 -- select distinct
@@ -57,9 +59,9 @@ the following query returns all distinct (sid, bid) pairs from the 'Reserves' ta
 -- 	Reserves;
 
 /*
-in an `order by` clause, we first do the ordering on the first column that's specified, if there is a tie on the first column that we
-specify, we break the tie by ordering on the next column and so on; `order by` has to be on columns mentioned in the `select` clause,
-coz that's what we are sorting
+in an `order by` clause, we first do the ordering on the first column that's specified, if there is a tie on the first
+column that we specify, we break the tie by ordering on the next column and so on; `order by` has to be on columns
+mentioned in the `select` clause, coz that's what we are sorting
 */
 -- select
 -- 	*
@@ -71,8 +73,8 @@ coz that's what we are sorting
 -- ;
 
 /*
-each `aggregate` clause will produce a single row of output for each group;
-here we haven't specified any group, so the group is the whole table
+each `aggregate` clause will produce a single row of output for each group; here we haven't specified any group, so the
+group is the whole table
 */
 -- select
 -- 	avg(rating)
@@ -87,9 +89,10 @@ here we haven't specified any group, so the group is the whole table
 -- ;
 
 /*
-the following query is an error, coz the 'avg' `aggregate` clause returns a single value for a group, since we haven't specified it,
-the group is the whole table, the error here is that how does `sql` know to return a single value of 'age' for the whole group, i.e,
-what value to chose in the 'age' column for the whole table, therefore, this query is an error
+the following query is an error, coz the 'avg' `aggregate` clause returns a single value for a group, since we haven't
+specified it, the group is the whole table, the error here is that how does `sql` know to return a single value of
+'age' for the whole group, i.e, what value to chose in the 'age' column for the whole table, therefore, this query is
+an error
 */
 -- select
 -- 	age, avg(rating)
@@ -97,10 +100,10 @@ what value to chose in the 'age' column for the whole table, therefore, this que
 -- 	Sailors;
 
 /*
-following the previous query, we need to make sure to get a single value for the 'age' column, we can use an `aggregate` function
-for doing this, or we can `group by` on the 'age' column, which would create groups from the whole table based on 'age' column, i.e,
-it will return a single value for each group and then aggregate over each group's rating,
-cardinality of output = number of distinct group values
+following the previous query, we need to make sure to get a single value for the 'age' column, we can use an
+`aggregate` function for doing this, or we can `group by` on the 'age' column, which would create groups from the
+whole table based on 'age' column, i.e, it will return a single value for each group and then aggregate over each
+group's rating, cardinality of output = number of distinct group values
 */
 -- select
 -- 	age,
@@ -118,11 +121,13 @@ cardinality of output = number of distinct group values
 -- ;
 
 /*
-in the following query, we do `group by` S.age, which implies, create groups based on S.age, i.e, for each unique 'age' in the
-'age' column, output only a single row, the corresponding values of all columns for that row have to be aggregated or ommitted or
-further grouped by, because for a group, we need to tell `sql` how to output a single value for all the grouped rows, for every
-column that we want in the output (that exists in the `select` statement), therefore, the columns that we mention in the `select`
-statement are dependent on the columns we are grouping by
+in the following query, we do `group by` S.age, which implies, create groups based on S.age, i.e, for each
+unique 'age' value in the 'age' column, output only a single row, the corresponding values of all columns for that row
+have to be aggregated or omitted or further grouped by, because for each group, we need to tell `sql` how to output a
+single value for all the grouped rows, for every column that we want in the output (that exists in the `select`
+statement);
+therefore, the columns that we mention in the `select` statement are dependent on the columns we are
+grouping by -> is this true? or are they both dependent on each other?
 */
 -- select
 -- 	S.age
@@ -147,8 +152,12 @@ at this point, the Sailors table looks like this:
 +-----+-------+--------+-----+
 |   5 | hello |      8 |  27 |
 +-----+-------+--------+-----+
-in the following query, we do `group by` S.age, S.rating -> create groups based on a unique pair of S.age, S.rating,
-i.e, for each unique 'age', 'rating' pair in the table, output only a single row
+in the following query, we do `group by` S.age, S.rating
+one way to thing about this is -> create groups based on a unique pair of S.age, S.rating, i.e, for each unique 'age',
+'rating' pair in the table, output only a single row;
+another way to think about it is -> first create groups by S.age column, this creates unique groups for each unique
+S.age column, then for each of those groups, we create unique groups based for each unique S.rating column,
+essentially outputing a single row for each unique 'age', 'rating' pair
 */
 -- select
 -- 	S.age,
@@ -161,8 +170,8 @@ i.e, for each unique 'age', 'rating' pair in the table, output only a single row
 -- ;
 /*
 even though there is a single/same 'age' for 'Nancy', 'jai', 'hello', i.e, 27, the uniqueness is defined by the pair of
-(S.age, S.rating), for which there are only 2 unique pairs (8, 27) and (9, 27) and that is what we get in the
-output, the other unique pairs being (7, 22) and (2, 39):
+(S.age, S.rating), for which there are only 2 unique pairs (8, 27) and (9, 27) and that is what we get in the output,
+the other unique pairs being (7, 22) and (2, 39):
 +=====+========+
 | age | rating |
 +=====+========+
@@ -177,15 +186,16 @@ output, the other unique pairs being (7, 22) and (2, 39):
 */
 
 /*
-let's say we only want certain groups in the output, groups that satisfy a particular condition
-one way to do this, is to filter output groups using the `having` clause;
-think of `having` as a condition that will be applied on the output rows produced as the output of
-the `group by` clause, followed by the aggregation defined by the `having` clause on the output of
-the `group by` clause
+say we only want certain groups in the output, groups that satisfy a particular condition one way to do this, is to
+filter output groups using the `having` clause;
+think of `having` as a condition that will be applied on the rows produced as the output of the `group by` clause,
+followed by the aggregation defined by the `having` clause on the output of the `group by` clause;
+--
 in the following statement, we have:
-no `group by` (default `group by` over whole table), no aggregation in `having` clause (default aggregation for each single value);
-when we don't have a `group by`, can we understand it as all rows being different groups and the aggregation is each row's value in that
-column, when we then use `having`, it will behave like a `where` clause?
+no `group by` (default `group by` over whole table), no aggregation in `having` clause (default aggregation for each
+single value);
+when we don't have a `group by`, can we understand it as all rows being different groups and the aggregation is each
+row's value in that column, when we then use `having`, it will behave like a `where` clause? like it is in this case?
 */
 -- select
 --     age
@@ -198,9 +208,9 @@ column, when we then use `having`, it will behave like a `where` clause?
 /*
 in the following statement, we have:
 no `group by` (default `group by` over whole table), aggregation in `having` clause;
-here we are aggregating over 'age' and selecting 'age' as well, aggregation will return a single value, which is the avg(age), but
-what should be the 'age' value corresponding to that 'avg' value, i.e, the 'age' value is ambiguous for the group (the whole table),
-hence this query is an error:
+here we are aggregating over 'age' and selecting 'age', aggregation will return a single value, which is the avg(age),
+but what should be the 'age' value corresponding to that 'avg' value, i.e, the 'age' value is ambiguous for the group
+(the whole table), hence this query is an error:
 */
 -- select
 --     age
@@ -228,9 +238,9 @@ hence this query is an error:
 -- 	avg(age) < 30
 -- ;
 /*
-in the above query, the having doesn't make much sense, when we group by age, we have a single value for each group, if we then
-find the avg over that single value, we will get the same value because we only have a single value, i.e, the above query and the
-following query are equivalent
+in the above query, the having doesn't make much sense, when we group by age, we have a single value for each group,
+if we then find the avg over that single value, we will get the same value because we only have a single value, i.e,
+the above query and the following query are equivalent
 */
 -- select
 --     age
@@ -253,7 +263,7 @@ following query are equivalent
 -- 	avg(rating) > 5
 -- ;
 
--- -- putting it all together, let's say we have a query using everything we have learnt above
+-- -- putting it all together, say we have a query using everything we have learnt above
 -- select
 -- 	S.age,
 --     avg(S.rating),
@@ -275,7 +285,7 @@ how do we read this query to understand/predict the output, there are 2 ways to 
 first way:
 -> we start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
 an alias for Sailors table;
--> next we read the where clause: where S.age < 30 -> output only the rows where age is column is less than 30;
+-> next we read the where clause: where S.age < 30 -> output only the rows where age is less than 30;
 -> next we read the group by clause: group by S.age -> create groups based on S.age, i.e, for each unique age in the
 age column, output only a single row;
 -> next we filter the groups created by the group by operation using the having clause: having count(*) >= 2 -> keep
@@ -284,22 +294,24 @@ only those groups that have atleast 2 rows;
 obtained as the output of above constructs, i.e, for each of the groups, we get the age, the average rating and
 the number of elements in that group
 -> we then order by the average rating of each group
+--
 second way:
 -> we start from the 'from' clause: from Sailors S -> output rows/tuples from the Sailors table/relation, use S as
 an alias for Sailors table;
 -> next we read the where clause: where S.age < 30 -> output only the rows where age is column is less than 30;
 -> next we read the select clause: we request the age column value and for whatever grouping we are about to
-perform (remember if we don't do any grouping using the group by clause, we are talking about the whole table as
-a group), we need the aggregated average rating and the aggregated count of rows post grouping -> note that since
+perform, we need the aggregated average rating and the aggregated count of rows post grouping -> note that since
 we are asking for the age column along with the aggregated values, we would need to include the age column in the
 group by clause, this is because we are aggregating the values for other columns and those will return a single
-value, sql needs a single value to output corresponding to those values and if we don't have the group by clause,
-that single value is ambiguous since the group by is essentially on the whole table, we can't select any row's age
+value, sql needs a single age value to output corresponding to those values and if we don't have the group by clause,
+that single value is ambiguous since the group by is essentially on the whole table (remember if we don't do any
+grouping using the group by clause, we are talking about the whole table as a group), we can't select any row's age
 value and output it along with the aggregation done on the rating column and the count; with this info, we move to
 the group by clause
 -> we read the group by clause: group by S.age -> because of the select cause, we need S.age in the group by, what this
-does it that for each unique age in the age column, output only a single row and perform aggregations requested in select
-clause for each group, rather than the whole table;
+does is, for each unique age in the age column, construct 1 group and perform other aggregations requested in the
+select clause on that group, then output only a single row for each group having that unique age, aggregated average
+rating and aggregated count;
 -> next we filter the groups created by the group by operation using the having clause: having count(*) >= 2 -> keep
 only those groups that have atleast 2 rows;
 -> we then order by the average rating of each group
@@ -307,10 +319,10 @@ only those groups that have atleast 2 rows;
 
 /*
 the relational model has well-defined query semantics: what this means is that any query that we define has a single
-meaning and regardless of the dbms we use, if it follows sql semantics, the ouptut is well defined
+meaning and regardless of the dbms we use, if it follows sql semantics, the ouptut is well defined;
 sql extends the "pure" relational model with some sql specific features, for eg. duplicate rows (rows that are exactly
-the same (all columns values are the same, except the primary key?) but we count them as separate), aggregates, ordering
-of output etc.
-typically, there is more than one way to write the same query, i.e, that will output the same rows and it is the job of
-the dbms to figure out the optimal way to execute that query
+the same (all columns values are the same, except the primary key?) but we count them as separate), aggregates,
+ordering of output etc.
+typically, there is more than one query that will return the same set of rows, it is the job of the dbms to figure out
+the optimal way to execute that query
 */
