@@ -2,6 +2,10 @@
 
 DBs: hrs given: 165 \[last updated: 1/9/2025\] (started on 16/6/2023); we should at the very least have 500 dbs hrs
 
+when writing db blog, or more blogs -> references to official docs and even if possible, reference to actual code pieces, strung together to explain the concept -> what code lines are actually hit when that concept is actually executed -> visually represented so that it could be understood properly, at the first glance
+
+databases blog name: a primer on databases for system design interviews -> make other blogs with similar name? a primer on ...
+
 * ~~orm: sqlalchemy~~
 
 * DBMS
