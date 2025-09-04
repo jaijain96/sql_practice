@@ -120,7 +120,7 @@ databases blog name: a primer on databases for system design interviews -> make 
 
     * how do unique ids translate from api layer to db layer
 
-    * how are spatial data types stored and retrieved efficiently, r-tree indexes and more in a sql db, how do various methods defined on them work, for eg, mbrcontains, how does it work -> how do they work in a distributed environment
+    * how are spatial data types stored and retrieved efficiently, r-tree indexes and more in a sql db, learn r-tree index core algorithm, how do various methods defined on them work, for eg, mbrcontains, how does it work -> how do they work in a distributed environment
 
     * how are json data types stored and retrieved efficiently, how do various methods defined on them work -> how do they work in a distributed environment
 
@@ -292,3 +292,7 @@ need a set of “on scale” considerations to evaluate each db on, to evaluate 
 * partitioning
 * acid principles
 * transactions
+
+let’s do some math on how much of scaling is actually required
+mysql process on a machine with some good amount of disk space and cpu speed
+how much many rows, containing what type of data, what attributes, represented as a json, who much can just a few machines actually store, even with precautions taken in terms of keeping the disk space and cpu speeds optimal
