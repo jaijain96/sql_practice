@@ -28,7 +28,7 @@ databases blog name: a primer on databases for system design interviews -> make 
 
     * ch13: data types
 
-    * comparison of innodb clusters and ndb clusters found [here](https://dev.mysql.com/doc/refman/8.4/en/mysql-cluster-compared.html)
+    * [comparison of innodb clusters and ndb clusters found here](https://dev.mysql.com/doc/refman/8.4/en/mysql-cluster-compared.html)
 
       * replication
 
@@ -296,3 +296,32 @@ need a set of “on scale” considerations to evaluate each db on, to evaluate 
 let’s do some math on how much of scaling is actually required
 mysql process on a machine with some good amount of disk space and cpu speed
 how much many rows, containing what type of data, what attributes, represented as a json, who much can just a few machines actually store, even with precautions taken in terms of keeping the disk space and cpu speeds optimal
+
+for varied datatypes it stores, mysql offers different types of indexes, for example:
+
+1. for normal usage, it offers b-tree indexes
+2. for spatial data, it offers r-tree indexes
+3. for text data, it offers full text indexes
+4. for json data, it doesn't directly offer gin indexes but still we can use functional indexes
+
+how do we measure performance of these indexes
+what are the factors that affect performance of indexes
+how do we choose the right index for a particular use case, what are the tradeoffs involved in choosing a particular
+index
+what are the best practices for choosing indexes
+what are the best practices for using indexes
+what are the best practices for maintaining indexes
+what are the best practices for monitoring indexes
+
+how performant is mysql for a particular type of data (using the index for that type of data) vs. a dedicated
+independent db, optimized for that type of data, for that particular use case
+if both dbs do end up using the same index type, how does performance compare, what are the factors that affect
+performance, what makes the other db, or mysql, better
+
+what are the tradeoffs involved in using a single database for all types of data vs. using a separate database for
+each type of data;
+
+what are the tradeoffs involved if we use multiple instances of the same type of db for different types of data, vs.
+using different types of dbs for different types of data, say one instance of mysql for json data and another
+instance of mysql for text data, vs. using a single instance of mongodb for json data and single
+instance of elasticsearch for text data
