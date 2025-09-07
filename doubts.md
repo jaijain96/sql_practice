@@ -325,3 +325,35 @@ what are the tradeoffs involved if we use multiple instances of the same type of
 using different types of dbs for different types of data, say one instance of mysql for json data and another
 instance of mysql for text data, vs. using a single instance of mongodb for json data and single
 instance of elasticsearch for text data
+
+in general for different dbs
+
+* what are the different types of data they can store
+* what are the different types of indexes they offer
+* what are the different types of queries they can execute
+* what are the different types of transactions they can execute
+* what are the different types of replication they offer
+* what are the different types of partitioning they offer
+* what are the different types of scaling they offer
+* what are the different types of monitoring they offer
+* what are the different types of backup and restore they offer
+* what are the different types of security they offer
+* what are the different types of authentication and authorization they offer
+* what are the different types of encryption they offer
+* what are the different types of compression they offer
+* what are the different types of caching they offer
+* what are the different types of logging they offer
+* what are the different types of alerting they offer
+* what are the different types of tuning they offer
+* what are the different types of optimization they offer
+* what are the different types of performance monitoring they offer
+* what are the different types of performance tuning they offer
+* what are the different types of performance optimization they offer
+* what are the different types of performance analysis they offer
+* what are the different types of performance testing they offer
+* what are the different types of performance benchmarking they offer
+* what are the different types of performance comparison they offer
+* what are the different types of performance evaluation they offer
+* what are the different types of performance prediction they offer
+* what are the different types of performance simulation they offer
+* what are the different types of performance modelling they offer
