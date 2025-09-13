@@ -27,12 +27,39 @@ the cache to provide a consistent view of the data
 
 ### ALGORITHM PART
 
-*
+* How do common crud operations work from the in memory structures to the on disk structures? How are these optimized
+  for the type of data that the db stores?
+  * if the db claims that is a rdbms, how do common crud operations work on the tables, rows, columns etc.
+  * if the db claims it is document store, how do common crud operations work on the documents, fields etc.
+  * if the db claims it is a graph db, how do common crud operations work on the nodes, edges etc.
+  * if the db claims it is a key value store, how do common crud operations work on the keys, values etc.
+  * if the db claims it is a columnar db, how do common crud operations work on the columns, rows etc.
+  * if the db claims it is a time series db, how do common crud operations work on the time series data etc.
+  * if the db claims it is a text based db, how do common crud operations work on the text data etc.
+  
+  What is the runtime complexity of each of the crud operations for each of these dbs?
+
+* What are the specialized operations that the db offers? How do these specialized operations work from the in memory
+  structures to the on disk structures? How are these optimized for the type of data that the db stores?
+
+  What is the runtime complexity of each of the specialized operations for each of these dbs? What would it take to
+  implement these operations on a different type of db? How would the runtime complexity change?
+
 * How are the components: query language, the query parser, the query optimizer, the query
   executor optimized for the type of data that the db stores? Are there any special components that each db has for its
   specific operations, what is the core algorithm for each of these components? Are the indexes and log structures part
   of these specific components? What are the different types of indexes that the db offers? How are they implemented?
   How does the db decide which index to use for a query?
+* How do the crud and specialized operations work for read requests in a single thread?
+* How do the crud and specialized operations work for write requests in a single thread?
+* How do the crud and specialized operations work for read requests from 2 or more threads?
+* How do the crud and specialized operations work for write requests from 2 or more threads?
+* How do the crud and specialized operations work when there are concurrent read and write requests from 2 or more
+  threads?
+* How do the crud and specialized operations scale with the number of concurrent requests?
+* How do the crud and specialized operations scale with the size of the data?
+
+### RECOVERY PART
 
 ### NETWORK PART
 
