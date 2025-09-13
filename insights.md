@@ -66,4 +66,12 @@ the cache to provide a consistent view of the data
 * How does the db handle network communication? What network protocol is used? What is the format of the network
   packets? How is data serialized and deserialized for network transfer? How similar/different, is this to an api
   framework running within a web server process?
-*
+* What is the network protocol used for communication between the client and the server and the server and other
+  servers in a distributed environment?
+* What happens when a client initiates a connection to the db?
+
+* What happens when the client sends a request to the db to authenticate a user? What happens when the
+  client sends a request to the db to authorize a user?
+
+* How does the db handle failover? How does the db handle failover in a distributed environment?
+* How does the db handle replication? How does the db handle partitioning? How does the db handle sharding?
