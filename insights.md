@@ -13,7 +13,7 @@ the cache to provide a consistent view of the data
 
 ## TEMPLATE TO ASK QUESTIONS IN ORDER TO UNDERSTAND EACH DB
 
-### DATA STRUCTURE PART
+### DATA STRUCTURES
 
 * What different types of data does the db say that it can store?
 * The database is a process running on a machine, how are the different data types stored in memory? What data
@@ -25,7 +25,7 @@ the cache to provide a consistent view of the data
   classes (data structure) are involved in each layer and what are the main functions of each class?
 * How is data laid out on disk? How is the disk file structured in order to represent each data type?
 
-### ALGORITHM PART
+### ALGORITHMS
 
 * How do common crud operations work from the in memory structures to the on disk structures? How are these optimized
   for the type of data that the db stores?
@@ -59,16 +59,16 @@ the cache to provide a consistent view of the data
 * How do the crud and specialized operations scale with the number of concurrent requests?
 * How do the crud and specialized operations scale with the size of the data?
 
-### RECOVERY PART
+### RECOVERY
 
 * How does the db handle crashes when running on a single machine? A crash can occurr at any time when the db is
   running, for the common crud, and various specialized operations, the majority of the crashes could be boiled down
   to a few specific types of crashes, what are those?
-* How does the db handle each of the above types of crashes? What are specific in memory and on disk structures that
-  are used to handle crashes? What are the algorithms used on those structures to handle crashes? What is the runtime
-  complexity of the crash recovery process?
+* How does the db handle each of the above types of crashes? What are the in memory and on disk structures that are
+  used for implementation? What are the algorithms used on those structures? What is the runtime complexity of the
+  implementation as a result of these data structures and algorithms?
 
-### NETWORK PART
+### NETWORKING
 
 * How does the db handle network communication? What network protocol is used? What is the format of the network
   packets? How is data serialized and deserialized for network transfer? How similar/different, is this to an api
@@ -77,8 +77,27 @@ the cache to provide a consistent view of the data
   servers in a distributed environment?
 * What happens when a client initiates a connection to the db?
 
-* What happens when the client sends a request to the db to authenticate a user? What happens when the
-  client sends a request to the db to authorize a user?
+### SECURITY
+
+#### DATA STRUCTURE SECURITY
+
+* How is data kept secure in memory and on disk? How is data kept secure in transit? What are the in memory and
+  on disk structures that are used for implementation? What are the algorithms used on those structures? What is the
+  runtime complexity of the implementation as a result of these data structures and algorithms?
+
+#### ALOGIRHTMS SECURITY: AUTHN, AUTHZ
+
+* What is the authentication and authorization framework used by the db? What are the different types of
+  authentication and authorization methods supported by the db? What are the in memory and on disk structures that are
+  used for implementation? What are the algorithms used on those structures? What is the runtime complexity of the
+  implementation as a result of these data structures and algorithms?
+
+### TELEMETRY
+
+* What is the logging, tracing, monitoring and alerting framework used by the db? What are the different types of
+  metrics that the db exposes? What are the different types of alerts that the db raises? What are the in memory and
+  on disk structures that are used for implementation? What are the algorithms used on those structures? What is the
+  runtime complexity of the implementation as a result of these data structures and algorithms?
 
 * How does the db handle failover? How does the db handle failover in a distributed environment?
 * How does the db handle replication? How does the db handle partitioning? How does the db handle sharding?
