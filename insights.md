@@ -61,6 +61,13 @@ the cache to provide a consistent view of the data
 
 ### RECOVERY PART
 
+* How does the db handle crashes when running on a single machine? A crash can occurr at any time when the db is
+  running, for the common crud, and various specialized operations, the majority of the crashes could be boiled down
+  to a few specific types of crashes, what are those?
+* How does the db handle each of the above types of crashes? What are specific in memory and on disk structures that
+  are used to handle crashes? What are the algorithms used on those structures to handle crashes? What is the runtime
+  complexity of the crash recovery process?
+
 ### NETWORK PART
 
 * How does the db handle network communication? What network protocol is used? What is the format of the network
