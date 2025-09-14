@@ -46,7 +46,7 @@ the cache to provide a consistent view of the data
   implement these operations on a different type of db? How would the runtime complexity change?
 
 * How are the components: query language, the query parser, the query optimizer, the query
-  executor optimized for the type of data that the db stores? Are there any special components that each db has for its
+  executor, optimized for the type of data that the db stores? Are there any special components that each db has for its
   specific operations, what is the core algorithm for each of these components? Are the indexes and log structures part
   of these specific components? What are the different types of indexes that the db offers? How are they implemented?
   How does the db decide which index to use for a query?
@@ -98,6 +98,13 @@ the cache to provide a consistent view of the data
   metrics that the db exposes? What are the different types of alerts that the db raises? What are the in memory and
   on disk structures that are used for implementation? What are the algorithms used on those structures? What is the
   runtime complexity of the implementation as a result of these data structures and algorithms?
+
+### SCALE UP
+
+### SCALE OUT
+
+* 
+* How does the db handle network communication in a distributed environment?
 
 * How does the db handle failover? How does the db handle failover in a distributed environment?
 * How does the db handle replication? How does the db handle partitioning? How does the db handle sharding?
