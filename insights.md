@@ -99,12 +99,67 @@ the cache to provide a consistent view of the data
   on disk structures that are used for implementation? What are the algorithms used on those structures? What is the
   runtime complexity of the implementation as a result of these data structures and algorithms?
 
-### SCALE UP
+### SCALE UP/DOWN
 
-### SCALE OUT
+### SCALE OUT/IN
 
-* 
-* How does the db handle network communication in a distributed environment?
+* There are usually only 2 ways to scale out a db, using replication, and using partitioning, are there any other ways
+  that this db provides to scale it out, write questions regarding those in this doc and answer them.
+* Create fermi estimates for how much of scaling is actually required: a single db process on a machine with some good
+  amount of disk space and cpu speed -> how much many rows, containing what type of data, what attributes, represented
+  as a json, who much can just a few machines actually store, even with precautions taken in terms of keeping the disk
+  space and cpu speeds optimal
 
-* How does the db handle failover? How does the db handle failover in a distributed environment?
-* How does the db handle replication? How does the db handle partitioning? How does the db handle sharding?
+#### REPLICATION
+
+* What are the different types of replication methods supported by the db? What are the different types of replication
+  topologies supported by the db?
+* How are the crud/specialized operations carried out in a replicated environment? How is a replica selected for a
+  crud/specialized operation? How does this coordination take place? Where does it take place? What is the
+  architecture of the component that does this? How is it implemented in memory and on disk, what algorithm does it
+  use and what is the resultant runtime complexity? Looking at the db as a whole:
+  * How does the coordination work for crud/specialized operations for read requests by a single thread?
+  * How does the coordination work for crud/specialized operations for write requests by a single thread?
+  * How does the coordination work for crud/specialized operations for read requests by more than one thread?
+  * How does the coordination work for crud/specialized operations for write requests by more than one thread?
+  * How does the coordination work for crud/specialized operations when there are concurrent read and write requests
+    by more than one thread?
+  * How does the coordination for crud/specialized operations scale with the number of concurrent requests?
+  * How does the coordination for crud/specialized operations scale with the size of the data?
+
+* How does the db handle network communication in a replicated environment? What protocol is used to communicate
+  between the different nodes in the cluster? What is the format of the network packets? How is data serialized and
+  deserialized for network transfer?
+* How are recovery, security, telemetry handled in a replicated environment?
+* What problems arise when carrying out these operations in a replicated environment? How does the db solve these
+  problems? How are guarantees that the db states it provides, ensured in a replicated environment? What are the
+  specific components for solving these problems? How do they exist in memory and on disk? What are the algorithms
+  used on those structures? What is the runtime complexity of the implementation as a result of these data structures
+  and algorithms?
+
+#### PARTITIONING
+
+* What are the different types of partitioning methods supported by the db? What are the different types of
+  partitioning topologies supported by the db?
+* How are the crud/specialized operations carried out in a partitioned environment? How is a partition selected for a
+  crud/specialized operation? How does this coordination take place? Where does it take place? What is the
+  architecture of the component that does this? How is it implemented in memory and on disk, what algorithm does it
+  use and what is the resultant runtime complexity? Looking at the db as a whole:
+  * How does the coordination work for crud/specialized operations for read requests by a single thread?
+  * How does the coordination work for crud/specialized operations for write requests by a single thread?
+  * How does the coordination work for crud/specialized operations for read requests by more than one thread?
+  * How does the coordination work for crud/specialized operations for write requests by more than one thread?
+  * How does the coordination work for crud/specialized operations when there are concurrent read and write requests
+    by more than one thread?
+  * How does the coordination for crud/specialized operations scale with the number of concurrent requests?
+  * How does the coordination for crud/specialized operations scale with the size of the data?
+
+* How does the db handle network communication in a partitioned environment? What protocol is used to communicate
+  between the different nodes in the cluster? What is the format of the network packets? How is data serialized and
+  deserialized for network transfer?
+* How are recovery, security, telemetry handled in a partitioned environment?
+* What problems arise when carrying out these operations in a partitioned environment? How does the db solve these
+  problems? How are guarantees that the db states it provides, ensured in a partitioned environment? What are the
+  specific components for solving these problems? How do they exist in memory and on disk? What are the algorithms
+  used on those structures? What is the runtime complexity of the implementation as a result of these data structures
+  and algorithms?
